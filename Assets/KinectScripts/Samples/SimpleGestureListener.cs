@@ -11,7 +11,7 @@ public class SimpleGestureListener : MonoBehaviour, KinectGestures.GestureListen
 	private bool progressDisplayed;
 	
 	
-	public void UserDetected(uint userId, int userIndex)
+	public void UserDetected(uint userId, int userIndex)//Apabila ada user yang terdeteksi
 	{
 		// as an example - detect these user specific gestures
 		KinectManager manager = KinectManager.Instance;
@@ -31,7 +31,7 @@ public class SimpleGestureListener : MonoBehaviour, KinectGestures.GestureListen
 		}
 	}
 	
-	public void UserLost(uint userId, int userIndex)
+	public void UserLost(uint userId, int userIndex)//Apabila user tidak kedetect
 	{
 		if(GestureInfo != null)
 		{
