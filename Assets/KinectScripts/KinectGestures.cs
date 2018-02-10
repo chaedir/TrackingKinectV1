@@ -92,8 +92,12 @@ public class KinectGestures
 	private const int shoulderCenterIndex = (int)KinectWrapper.NuiSkeletonPositionIndex.ShoulderCenter;
 	private const int leftHipIndex = (int)KinectWrapper.NuiSkeletonPositionIndex.HipLeft;
 	private const int rightHipIndex = (int)KinectWrapper.NuiSkeletonPositionIndex.HipRight;
-	
-	
+
+
+    
+
+    
+
 	private static void SetGestureJoint(ref GestureData gestureData, float timestamp, int joint, Vector3 jointPos)
 	{
 		gestureData.joint = joint;
@@ -122,6 +126,7 @@ public class KinectGestures
 				gestureData.jointPos = jointPos;
 				gestureData.state++;
 				gestureData.complete = true;
+                //if X* = success then true
 			}
 		}
 		else
@@ -232,25 +237,73 @@ public class KinectGestures
 		float gestureBottom = jointsPos[shoulderCenterIndex].y - bandSize;
 		float gestureRight = jointsPos[rightHipIndex].x;
 		float gestureLeft = jointsPos[leftHipIndex].x;
-		
-		switch(gestureData.gesture)
+
+        //Viterbi Algorithm's setting attribut   
+        float a11 = 0.78f;
+        float a12 = 0.32f;
+        float a21 = 0.64f;
+        float a22 = 0.36f;
+
+        float b11 = 0.45f;
+        float b12 = 0.55f;
+        float b21 = 0.48f;
+        float b22 = 0.52f;
+
+        float phi1 = 0.5f;
+        float phi2 = 0.5f;
+
+        float b1O1 = 0f;
+        float b2O1 = 0f;
+        float b1O2 = 0f;
+        float b2O2 = 0f;
+
+        float d11 = 0f;
+        float d12 = 0f;
+
+        float d11a11 = d11 * a11;
+        float d12a21 = d12 * a21;
+        float d11a11b1O2 = d11a11 * b1O2;
+        float d12a21b1O2 = d12a21 * b1O2;
+
+        switch (gestureData.gesture)
 		{
 			// check for RaiseRightHand
 			case Gestures.RaiseRightHand:
 				switch(gestureData.state)
 				{
-					case 0:  // gesture detection
+                    case 0:  // gesture detection
+                        if (jointsTracked[rightHandIndex] && jointsTracked[rightShoulderIndex] &&
+                           (jointsPos[rightHandIndex].y - jointsPos[rightShoulderIndex].y) < 0.1f)
+                        {
+
+                            b1O1 = b12;
+
+                        }
+                        break;
+                    case 1:  // gesture detection
 						if(jointsTracked[rightHandIndex] && jointsTracked[rightShoulderIndex] &&
 					       (jointsPos[rightHandIndex].y - jointsPos[rightShoulderIndex].y) > 0.1f)
 						{
-							SetGestureJoint(ref gestureData, timestamp, rightHandIndex, jointsPos[rightHandIndex]);
+                            b2O1 = b22; 
+                            //Inisialisation
+                            d11 = phi1 * b1O1;
+                            d12 = phi2 * b2O1;
+
+                            SetGestureJoint(ref gestureData, timestamp, rightHandIndex, jointsPos[rightHandIndex]);
 						}
 						break;
 							
-					case 1:  // gesture complete
+					case 2:  // gesture complete
 						bool isInPose = jointsTracked[rightHandIndex] && jointsTracked[rightShoulderIndex] &&
 							(jointsPos[rightHandIndex].y - jointsPos[rightShoulderIndex].y) > 0.1f;
 
+                        b1O2 = b11;
+                        b2O2 = b21;
+                        //Rekurtion
+                        float d21 = Mathf.Max(d11a11 , d12a21) * b1O2; //Print nilai maxnya
+                        //float d22
+                        
+                        //masukkan dulu viterbi lalu jika hasilnya sukses maka masukkan variable di bawah
 						Vector3 jointPos = jointsPos[gestureData.joint];
 						CheckPoseComplete(ref gestureData, timestamp, jointPos, isInPose, KinectWrapper.Constants.PoseCompleteDuration);
 						break;
