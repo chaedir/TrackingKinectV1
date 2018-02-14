@@ -270,6 +270,8 @@ public class KinectGestures
         float d11a12b2O2 = d11a12 * b2O2 ;
         float d12a22b2O2 = d12a22 * b2O2;
 
+        float x = 0f;
+
         switch (gestureData.gesture)
 		{
 			// check for RaiseRightHand
@@ -281,44 +283,46 @@ public class KinectGestures
                            (jointsPos[rightHandIndex].y - jointsPos[rightShoulderIndex].y) < 0.1f)
                         {
 
-                            b1O1 = b12;
-
+                            b1O1 = b12; //determine the value of b1O1 and b22
+                            b2O1 = b22; //i choose b12 and b22 cz r.hand.y < r.shoulder.y (rock)
                         }
-                        break;
+                    break;
+
                     case 1:  // gesture detection
 						if(jointsTracked[rightHandIndex] && jointsTracked[rightShoulderIndex] &&
 					       (jointsPos[rightHandIndex].y - jointsPos[rightShoulderIndex].y) > 0.1f)
-						{
-                            b2O1 = b22; 
-                            //Inisialisation
-                            d11 = phi1 * b1O1;
+						{                             
+                            //Initialisation, calculation the first condition
+                            d11 = phi1 * b1O1; 
                             d12 = phi2 * b2O1;
-
                             SetGestureJoint(ref gestureData, timestamp, rightHandIndex, jointsPos[rightHandIndex]);
 						}
-						break;
+					break;
 							
 					case 2:  // gesture complete
 						bool isInPose = jointsTracked[rightHandIndex] && jointsTracked[rightShoulderIndex] &&
 							(jointsPos[rightHandIndex].y - jointsPos[rightShoulderIndex].y) > 0.1f;
 
-                        b1O2 = b11;
-                        b2O2 = b21;
-                        //Rekurtion
-                        float d21 = Mathf.Max(d11a11 , d12a21) * b1O2; //Print nilai maxnya float d11a11b1O2 = d11a11 * b1O2; float d12a21b1O2 = d12a21 * b1O2;
-                        float d22 = Mathf.Max(d11a12, d12a22) * b2O2; //d11a12b2O2 = d11a12*b2O2 ; d12a22b2O2 = d12a22*b2O2;
+                            b1O2 = b11; //determine the value of b1O2 and b2O2
+                            b2O2 = b21; //i choose b11 and b21 cz r.hand.y > r.shoulder.y (pop)
+                            //Rekurtion
+                            float d21 = Mathf.Max(d11a11 , d12a21) * b1O2; //Print nilai maxnya float d11a11b1O2 = d11a11 * b1O2; float d12a21b1O2 = d12a21 * b1O2;
+                            float d22 = Mathf.Max(d11a12, d12a22) * b2O2; //d11a12b2O2 = d11a12*b2O2 ; d12a22b2O2 = d12a22*b2O2;
 
-                        if (d21 == d11a11b1O2 || d22 == d11a12b2O2)
-                        {
-                            //if ( )
-                        }
+                            //Termination
+                            if (d21 == d11a11b1O2 || d22 == d11a12b2O2)
+                            {
+                                float x2 = x;
 
-                        //masukkan dulu viterbi lalu jika hasilnya sukses maka masukkan variable di bawah
-                        Vector3 jointPos = jointsPos[gestureData.joint];
-						CheckPoseComplete(ref gestureData, timestamp, jointPos, isInPose, KinectWrapper.Constants.PoseCompleteDuration);
-						break;
+                                if ( x2 == d21 || x2 == d22)
+                                {
+                                    Vector3 jointPos = jointsPos[gestureData.joint];
+                                    CheckPoseComplete(ref gestureData, timestamp, jointPos, isInPose, KinectWrapper.Constants.PoseCompleteDuration);
+                                }
+                             }                     
+                    break;
 				}
-				break;
+			break;
 
 			// check for RaiseLeftHand
 			case Gestures.RaiseLeftHand:

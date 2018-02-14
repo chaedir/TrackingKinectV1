@@ -43,6 +43,8 @@ public class SimpleGestureListener : MonoBehaviour, KinectGestures.GestureListen
 	                              float progress, KinectWrapper.NuiSkeletonPositionIndex joint, Vector3 screenPos)
 	{
 		//GestureInfo.guiText.text = string.Format("{0} Progress: {1:F1}%", gesture, (progress * 100));
+
+        //CLICK GESTURE
 		if(gesture == KinectGestures.Gestures.Click && progress > 0.3f)
 		{
 			string sGestureText = string.Format ("{0} {1:F1}% complete", gesture, progress * 100);//coba buat event apa disini
@@ -50,8 +52,18 @@ public class SimpleGestureListener : MonoBehaviour, KinectGestures.GestureListen
 				GestureInfo.GetComponent<GUIText>().text = sGestureText;
 			
 			progressDisplayed = true;
-		}		
-		else if((gesture == KinectGestures.Gestures.ZoomOut || gesture == KinectGestures.Gestures.ZoomIn) && progress > 0.5f)
+		}
+        //RISE RIGHT HAND GESTURE
+        else if (gesture == KinectGestures.Gestures.RaiseRightHand && progress > 0.3f)
+        {
+            string sGestureText = string.Format("{0} {1:F1}% complete", gesture, progress * 100);//coba buat event apa disini
+            if (GestureInfo != null)
+                GestureInfo.GetComponent<GUIText>().text = sGestureText;
+
+            progressDisplayed = true;
+        }
+
+        else if((gesture == KinectGestures.Gestures.ZoomOut || gesture == KinectGestures.Gestures.ZoomIn) && progress > 0.5f)
 		{
 			string sGestureText = string.Format ("{0} detected, zoom={1:F1}%", gesture, screenPos.z * 100);
 			if(GestureInfo != null)
@@ -73,10 +85,21 @@ public class SimpleGestureListener : MonoBehaviour, KinectGestures.GestureListen
 	                              KinectWrapper.NuiSkeletonPositionIndex joint, Vector3 screenPos)
 	{
 		string sGestureText = gesture + " detected";
+
+        //CLICK GESTURE COMPLETED
 		if(gesture == KinectGestures.Gestures.Click)
-			sGestureText += string.Format(" at ({0:F1}, {1:F1})", screenPos.x, screenPos.y);
-		
-		if(GestureInfo != null)
+        {
+            sGestureText += string.Format(" at ({0:F1}, {1:F1})", screenPos.x, screenPos.y);
+        }
+
+        //RIGHT HAND GESTURE COMPLETED
+        else if (gesture == KinectGestures.Gestures.RaiseRightHand)
+        {
+            sGestureText += string.Format(" at ({0:F1}, {1:F1})", screenPos.x, screenPos.y);
+        }
+            
+
+        if (GestureInfo != null)
 			GestureInfo.GetComponent<GUIText>().text = sGestureText;
 		
 		progressDisplayed = false;
