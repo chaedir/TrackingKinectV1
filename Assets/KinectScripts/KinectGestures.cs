@@ -261,9 +261,14 @@ public class KinectGestures
         float d12 = 0f;
 
         float d11a11 = d11 * a11;
+        float d11a12 = d11 * a12;
         float d12a21 = d12 * a21;
+        float d12a22 = d12 * a22;
+        
         float d11a11b1O2 = d11a11 * b1O2;
         float d12a21b1O2 = d12a21 * b1O2;
+        float d11a12b2O2 = d11a12 * b2O2 ;
+        float d12a22b2O2 = d12a22 * b2O2;
 
         switch (gestureData.gesture)
 		{
@@ -300,11 +305,16 @@ public class KinectGestures
                         b1O2 = b11;
                         b2O2 = b21;
                         //Rekurtion
-                        float d21 = Mathf.Max(d11a11 , d12a21) * b1O2; //Print nilai maxnya
-                        //float d22
-                        
+                        float d21 = Mathf.Max(d11a11 , d12a21) * b1O2; //Print nilai maxnya float d11a11b1O2 = d11a11 * b1O2; float d12a21b1O2 = d12a21 * b1O2;
+                        float d22 = Mathf.Max(d11a12, d12a22) * b2O2; //d11a12b2O2 = d11a12*b2O2 ; d12a22b2O2 = d12a22*b2O2;
+
+                        if (d21 == d11a11b1O2 || d22 == d11a12b2O2)
+                        {
+                            //if ( )
+                        }
+
                         //masukkan dulu viterbi lalu jika hasilnya sukses maka masukkan variable di bawah
-						Vector3 jointPos = jointsPos[gestureData.joint];
+                        Vector3 jointPos = jointsPos[gestureData.joint];
 						CheckPoseComplete(ref gestureData, timestamp, jointPos, isInPose, KinectWrapper.Constants.PoseCompleteDuration);
 						break;
 				}
