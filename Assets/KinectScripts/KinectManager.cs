@@ -1820,9 +1820,10 @@ public class KinectManager : MonoBehaviour
 							if((timestampNow >= gestureData.startTrackingAtTime) && 
 								!IsConflictingGestureInProgress(gestureData))
 							{
-								KinectGestures.CheckForGesture(userId, ref gestureData, Time.realtimeSinceStartup, 
+                                KinectGestures c = new KinectGestures();
+                                c.CheckForGesture (userId, ref gestureData, Time.realtimeSinceStartup, 
 									ref player1JointsPos, ref player1JointsTracked);
-								player1Gestures[g] = gestureData;
+                                player1Gestures[g] = gestureData;
 
 								if(gestureData.complete)
 								{
@@ -1944,7 +1945,8 @@ public class KinectManager : MonoBehaviour
 							if((timestampNow >= gestureData.startTrackingAtTime) &&
 								!IsConflictingGestureInProgress(gestureData))
 							{
-								KinectGestures.CheckForGesture(userId, ref gestureData, Time.realtimeSinceStartup, 
+                                KinectGestures c = new KinectGestures();
+								c.CheckForGesture(userId, ref gestureData, Time.realtimeSinceStartup, 
 									ref player2JointsPos, ref player2JointsTracked);
 								player2Gestures[g] = gestureData;
 
@@ -2195,9 +2197,10 @@ public class KinectManager : MonoBehaviour
 				jointsPos[j] = kinectToWorld.MultiplyPoint3x4(skeletonData.SkeletonPositions[j]);
 			}
 		}
-		
-		// estimate the gesture progess
-		KinectGestures.CheckForGesture(userId, ref gestureData, Time.realtimeSinceStartup, 
+
+        // estimate the gesture progess
+        KinectGestures c = new KinectGestures();
+		c.CheckForGesture(userId, ref gestureData, Time.realtimeSinceStartup, 
 			ref jointsPos, ref jointsTracked);
 		
 		// check if gesture is complete
