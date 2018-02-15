@@ -94,11 +94,52 @@ public class KinectGestures
 	private const int rightHipIndex = (int)KinectWrapper.NuiSkeletonPositionIndex.HipRight;
 
 
-    
+    float a11 = 0.78f;
+    float a12 = 0.32f;
+    float a21 = 0.64f;
+    float a22 = 0.36f;
 
-    
+    float b11 = 0.45f;
+    float b12 = 0.55f;
+    float b21 = 0.48f;
+    float b22 = 0.52f;
 
-	private static void SetGestureJoint(ref GestureData gestureData, float timestamp, int joint, Vector3 jointPos)
+    float phi1 = 0.5f;
+    float phi2 = 0.5f;
+
+    float b1O1 = 0f;
+    float b2O1 = 0f;
+    float b1O2 = 0f;
+    float b2O2 = 0f;
+
+    float d11 = 0f;
+    float d12 = 0f;
+
+    /*float d11a11; = d11 * a11;
+    float d11a12 = d11 * a12;
+    float d12a21 = d12 * a21;
+    float d12a22 = d12 * a22;
+
+    float d11a11b1O2 = d11a11 * b1O2;
+    float d12a21b1O2 = d12a21 * b1O2;
+    float d11a12b2O2 = d11a12 * b2O2;
+    float d12a22b2O2 = d12a22 * b2O2;*/
+
+    float d11a11;
+    float d11a12;
+    float d12a21;
+    float d12a22;
+
+    float d11a11b1O2;
+    float d12a21b1O2;
+    float d11a12b2O2;
+    float d12a22b2O2;
+
+    float x = 0f;
+
+
+
+    private static void SetGestureJoint(ref GestureData gestureData, float timestamp, int joint, Vector3 jointPos)
 	{
 		gestureData.joint = joint;
 		gestureData.jointPos = jointPos;
@@ -227,7 +268,7 @@ public class KinectGestures
 //	}
 	
 	// estimate the next state and completeness of the gesture
-	public static void CheckForGesture(uint userId, ref GestureData gestureData, float timestamp, ref Vector3[] jointsPos, ref bool[] jointsTracked)
+	public void CheckForGesture(uint userId, ref GestureData gestureData, float timestamp, ref Vector3[] jointsPos, ref bool[] jointsTracked)
 	{
 		if(gestureData.complete)
 			return;
@@ -239,38 +280,15 @@ public class KinectGestures
 		float gestureLeft = jointsPos[leftHipIndex].x;
 
         //Viterbi Algorithm's setting attribut   
-        float a11 = 0.78f;
-        float a12 = 0.32f;
-        float a21 = 0.64f;
-        float a22 = 0.36f;
+        d11a11 = d11 * a11;
+        d11a12 = d11 * a12;
+        d12a21 = d12 * a21;
+        d12a22 = d12 * a22;
 
-        float b11 = 0.45f;
-        float b12 = 0.55f;
-        float b21 = 0.48f;
-        float b22 = 0.52f;
-
-        float phi1 = 0.5f;
-        float phi2 = 0.5f;
-
-        float b1O1 = 0f;
-        float b2O1 = 0f;
-        float b1O2 = 0f;
-        float b2O2 = 0f;
-
-        float d11 = 0f;
-        float d12 = 0f;
-
-        float d11a11 = d11 * a11;
-        float d11a12 = d11 * a12;
-        float d12a21 = d12 * a21;
-        float d12a22 = d12 * a22;
-        
-        float d11a11b1O2 = d11a11 * b1O2;
-        float d12a21b1O2 = d12a21 * b1O2;
-        float d11a12b2O2 = d11a12 * b2O2 ;
-        float d12a22b2O2 = d12a22 * b2O2;
-
-        float x = 0f;
+        d11a11b1O2 = d11a11 * b1O2;
+        d12a21b1O2 = d12a21 * b1O2;
+        d11a12b2O2 = d11a12 * b2O2;
+        d12a22b2O2 = d12a22 * b2O2;
 
         switch (gestureData.gesture)
 		{
@@ -285,30 +303,36 @@ public class KinectGestures
 
                             b1O1 = b12; //determine the value of b1O1 and b22
                             b2O1 = b22; //i choose b12 and b22 cz r.hand.y < r.shoulder.y (rock)
+                            //Debug.Log(b1O1);
+                            SetGestureJoint(ref gestureData, timestamp, rightHandIndex, jointsPos[rightHandIndex]);
                         }
                     break;
 
                     case 1:  // gesture detection
 						if(jointsTracked[rightHandIndex] && jointsTracked[rightShoulderIndex] &&
 					       (jointsPos[rightHandIndex].y - jointsPos[rightShoulderIndex].y) > 0.1f)
-						{                             
+						{
                             //Initialisation, calculation the first condition
-                            d11 = phi1 * b1O1; 
+                            //b1O1 = b12; //determine the value of b1O1 and b22
+                            //b2O1 = b22; //i choose b12 and b22 cz r.hand.y < r.shoulder.y (rock)
+                            d11 = phi1 * b1O1;
+                            Debug.Log(b1O1);
                             d12 = phi2 * b2O1;
                             SetGestureJoint(ref gestureData, timestamp, rightHandIndex, jointsPos[rightHandIndex]);
+                            //Debug.Log(b12);
 						}
 					break;
 							
 					case 2:  // gesture complete
 						bool isInPose = jointsTracked[rightHandIndex] && jointsTracked[rightShoulderIndex] &&
-							(jointsPos[rightHandIndex].y - jointsPos[rightShoulderIndex].y) > 0.1f;
-
+							(jointsPos[rightHandIndex].y - jointsPos[rightShoulderIndex].y) > 0.1f;                            
+                            
                             b1O2 = b11; //determine the value of b1O2 and b2O2
                             b2O2 = b21; //i choose b11 and b21 cz r.hand.y > r.shoulder.y (pop)
                             //Rekurtion
                             float d21 = Mathf.Max(d11a11 , d12a21) * b1O2; //Print nilai maxnya float d11a11b1O2 = d11a11 * b1O2; float d12a21b1O2 = d12a21 * b1O2;
                             float d22 = Mathf.Max(d11a12, d12a22) * b2O2; //d11a12b2O2 = d11a12*b2O2 ; d12a22b2O2 = d12a22*b2O2;
-
+                            Debug.Log(d21);                        
                             //Termination
                             if (d21 == d11a11b1O2 || d22 == d11a12b2O2)
                             {
@@ -514,7 +538,7 @@ public class KinectGestures
 				switch(gestureData.state)
 				{
 					case 0:  // gesture detection - phase 1
-						if(jointsTracked[rightHandIndex] && jointsTracked[rightElbowIndex] &&
+						/*if(jointsTracked[rightHandIndex] && jointsTracked[rightElbowIndex] &&
 					       (jointsPos[rightHandIndex].y - jointsPos[rightElbowIndex].y) > -0.1f)
 						{
 							SetGestureJoint(ref gestureData, timestamp, rightHandIndex, jointsPos[rightHandIndex]);
@@ -522,8 +546,8 @@ public class KinectGestures
 
 							// set screen position at the start, because this is the most accurate click position
 							SetScreenPos(userId, ref gestureData, ref jointsPos, ref jointsTracked);
-						}
-						else if(jointsTracked[leftHandIndex] && jointsTracked[leftElbowIndex] &&
+						}*/
+						if(jointsTracked[leftHandIndex] && jointsTracked[leftElbowIndex] &&
 					            (jointsPos[leftHandIndex].y - jointsPos[leftElbowIndex].y) > -0.1f)
 						{
 							SetGestureJoint(ref gestureData, timestamp, leftHandIndex, jointsPos[leftHandIndex]);
@@ -603,7 +627,7 @@ public class KinectGestures
 //						break;
 				}
 				break;
-
+            
 			// check for SwipeLeft
 			case Gestures.SwipeLeft:
 				switch(gestureData.state)
