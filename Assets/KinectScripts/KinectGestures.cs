@@ -107,20 +107,19 @@ public class KinectGestures
     float phi1 = 0.5f;
     float phi2 = 0.5f;
 
-    float b1O1 = 0f;
-    float b2O1 = 0f;
-    float b1O2 = 0f;
-    float b2O2 = 0f;
+    float b1O1;
+    float b2O1;
+    float b1O2;
+    float b2O2;
 
-    float d11 = 0f;
-    float d12 = 0f;
+    float d11;
+    float d12;
 
-    /*float d11a11; = d11 * a11;
-    float d11a12 = d11 * a12;
-    float d12a21 = d12 * a21;
-    float d12a22 = d12 * a22;
+    //float d21;
 
-    float d11a11b1O2 = d11a11 * b1O2;
+   
+
+    /*float d11a11b1O2 = d11a11 * b1O2;
     float d12a21b1O2 = d12a21 * b1O2;
     float d11a12b2O2 = d11a12 * b2O2;
     float d12a22b2O2 = d12a22 * b2O2;*/
@@ -128,14 +127,7 @@ public class KinectGestures
     float d11a11;
     float d11a12;
     float d12a21;
-    float d12a22;
-
-    float d11a11b1O2;
-    float d12a21b1O2;
-    float d11a12b2O2;
-    float d12a22b2O2;
-
-    float x = 0f;
+    float d12a22;  
 
 
 
@@ -280,73 +272,138 @@ public class KinectGestures
 		float gestureLeft = jointsPos[leftHipIndex].x;
 
         //Viterbi Algorithm's setting attribut   
-        d11a11 = d11 * a11;
+        /*d11a11 = d11 * a11;
         d11a12 = d11 * a12;
         d12a21 = d12 * a21;
-        d12a22 = d12 * a22;
-
-        d11a11b1O2 = d11a11 * b1O2;
-        d12a21b1O2 = d12a21 * b1O2;
-        d11a12b2O2 = d11a12 * b2O2;
-        d12a22b2O2 = d12a22 * b2O2;
+        d12a22 = d12 * a22;*/
+        
 
         switch (gestureData.gesture)
 		{
 			// check for RaiseRightHand
 			case Gestures.RaiseRightHand:
-				switch(gestureData.state)
+                switch(gestureData.state)
 				{
                     case 0:  // gesture detection
                         if (jointsTracked[rightHandIndex] && jointsTracked[rightShoulderIndex] &&
                            (jointsPos[rightHandIndex].y - jointsPos[rightShoulderIndex].y) < 0.1f)
                         {
-
-                            b1O1 = b12; //determine the value of b1O1 and b22
+                            /*b1O1 = b12; //determine the value of b1O1 and b22
                             b2O1 = b22; //i choose b12 and b22 cz r.hand.y < r.shoulder.y (rock)
-                            //Debug.Log(b1O1);
-                            SetGestureJoint(ref gestureData, timestamp, rightHandIndex, jointsPos[rightHandIndex]);
+                            Debug.Log(b1O1);*/
+                            SetGestureJoint(ref gestureData, timestamp, rightHandIndex, jointsPos[rightHandIndex]);                
+                            
                         }
-                    break;
+
+                        break;
 
                     case 1:  // gesture detection
-						if(jointsTracked[rightHandIndex] && jointsTracked[rightShoulderIndex] &&
-					       (jointsPos[rightHandIndex].y - jointsPos[rightShoulderIndex].y) > 0.1f)
-						{
+                        if(jointsTracked[rightHandIndex] && jointsTracked[rightShoulderIndex] &&
+                               (jointsPos[rightHandIndex].y - jointsPos[rightShoulderIndex].y) > 0.1f)
+                            {
+                            //Debug.Log(b1O1);                            
                             //Initialisation, calculation the first condition
                             //b1O1 = b12; //determine the value of b1O1 and b22
                             //b2O1 = b22; //i choose b12 and b22 cz r.hand.y < r.shoulder.y (rock)
-                            d11 = phi1 * b1O1;
-                            Debug.Log(b1O1);
-                            d12 = phi2 * b2O1;
+                            /*d11 = phi1 * b1O1;                                
+                            d12 = phi2 * b2O1;*/
                             SetGestureJoint(ref gestureData, timestamp, rightHandIndex, jointsPos[rightHandIndex]);
-                            //Debug.Log(b12);
-						}
-					break;
-							
-					case 2:  // gesture complete
-						bool isInPose = jointsTracked[rightHandIndex] && jointsTracked[rightShoulderIndex] &&
-							(jointsPos[rightHandIndex].y - jointsPos[rightShoulderIndex].y) > 0.1f;                            
-                            
-                            b1O2 = b11; //determine the value of b1O2 and b2O2
-                            b2O2 = b21; //i choose b11 and b21 cz r.hand.y > r.shoulder.y (pop)
-                            //Rekurtion
-                            float d21 = Mathf.Max(d11a11 , d12a21) * b1O2; //Print nilai maxnya float d11a11b1O2 = d11a11 * b1O2; float d12a21b1O2 = d12a21 * b1O2;
-                            float d22 = Mathf.Max(d11a12, d12a22) * b2O2; //d11a12b2O2 = d11a12*b2O2 ; d12a22b2O2 = d12a22*b2O2;
-                            Debug.Log(d21);                        
-                            //Termination
-                            if (d21 == d11a11b1O2 || d22 == d11a12b2O2)
-                            {
-                                float x2 = x;
+                                //Debug.Log(b12);
+                            }
+                        break;
 
-                                if ( x2 == d21 || x2 == d22)
+                     case 2:  // gesture complete
+                        bool isInPose = jointsTracked[rightHandIndex] && jointsTracked[rightShoulderIndex] &&
+                                (jointsPos[rightHandIndex].y - jointsPos[rightShoulderIndex].y) > 0.1f;
+
+                        b1O1 = b12; //determine the value of b1O1 and b22
+                        b2O1 = b22; //i choose b12 and b22 cz r.hand.y < r.shoulder.y (rock) 
+                        b1O2 = b11; //determine the value of b1O2 and b2O2
+                        b2O2 = b21; //i choose b11 and b21 cz r.hand.y > r.shoulder.y (pop)
+
+                        //Initialisation
+                        d11 = phi1 * b1O1;
+                        d12 = phi2 * b2O1;
+                        //Debug.Log(d11);
+                        d11a11 = d11 * a11;
+                        d11a12 = d11 * a12;
+                        d12a21 = d12 * a21;
+                        d12a22 = d12 * a22;
+
+                        //Rekurtion
+                        //Looking for max number of d21
+                        float d21A = d11a11 * b1O2;
+                        float d21B = d12a21 * b1O2;
+
+                        //Looking for max number of d22
+                        float d22A = d11a12 * b2O2;
+                        float d22B = d12a22 * b2O2;
+
+                        Debug.Log("d21A");
+                        Debug.Log(d21A);
+                        Debug.Log("d21B");
+                        Debug.Log(d21B);
+                        Debug.Log("d22A");
+                        Debug.Log(d22A);
+                        Debug.Log("d22B");
+                        Debug.Log(d22B);
+                        //Termination
+                        if (d21A > d21B) // Condition 1. When All SUCCESS
+                        {
+                            float d21 = d21A;
+                            if (d22A > d22B)
+                            {
+                                //Debug.Log(x2);
+                                Vector3 jointPos = jointsPos[gestureData.joint];
+                                CheckPoseComplete(ref gestureData, timestamp, jointPos, isInPose, KinectWrapper.Constants.PoseCompleteDuration);
+                            }
+                        }
+
+                        if (d21A > d21B) // Condition 2. When d21A (success) > d22B (fail)
+                        {
+                            float d21 = d21A;
+                            if (d22A < d22B)
+                            {
+                                float d22 = d22B;
+                                if (d21 > d22)
                                 {
                                     Vector3 jointPos = jointsPos[gestureData.joint];
                                     CheckPoseComplete(ref gestureData, timestamp, jointPos, isInPose, KinectWrapper.Constants.PoseCompleteDuration);
                                 }
-                             }                     
-                    break;
-				}
-			break;
+                                
+                            }
+                        }
+
+                        if (d21A < d21B) // Condition 3. When d21B (fail) < d22A (success)
+                        {
+                            float d21 = d21B;
+                            if (d22A > d22B)
+                            {
+                                float d22 = d22A;
+                                if (d21 < d22)
+                                {
+                                    Vector3 jointPos = jointsPos[gestureData.joint];
+                                    CheckPoseComplete(ref gestureData, timestamp, jointPos, isInPose, KinectWrapper.Constants.PoseCompleteDuration);
+                                }
+                            }
+                        }
+
+                        //Termination
+                        /*if (d21 == d11a11b1O2 || d22 == d11a12b2O2)
+                                {
+                                    float x2 = x;
+
+                                    if ( x2 == d21 || x2 == d22)
+                                    {
+                                        //Debug.Log(x2);
+                                        Vector3 jointPos = jointsPos[gestureData.joint];
+                                        CheckPoseComplete(ref gestureData, timestamp, jointPos, isInPose, KinectWrapper.Constants.PoseCompleteDuration);
+                                    }
+                                 }  */
+                        break; 
+                }
+
+                break;
 
 			// check for RaiseLeftHand
 			case Gestures.RaiseLeftHand:
