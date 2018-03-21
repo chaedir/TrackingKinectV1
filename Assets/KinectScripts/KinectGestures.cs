@@ -95,7 +95,7 @@ public class KinectGestures
 
 
     float a11 = 0.78f;
-    float a12 = 0.32f;
+    float a12 = 0.22f;
     float a21 = 0.64f;
     float a22 = 0.36f;
 
