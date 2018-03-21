@@ -21,29 +21,33 @@ public class followPlayer : MonoBehaviour {
 		if (/*player.position.x > 0f*/camera1.position.x < player.position.x)
         {
             selisih = player.position.x - camera1.position.x;
-            selisih = selisih + Time.deltaTime;
+            //selisih = selisih + Time.deltaTime;
+            //t.eulerAngles = Vector3.Lerp (t.eulerAngles, new Vector3(t.eulerAngles.x, -selisih * 10, t.eulerAngles.z), 0.005f);
             t.eulerAngles = (new Vector3(t.eulerAngles.x, -selisih * 10, t.eulerAngles.z));
         }
 
         if (camera1.position.x > player.position.x)
         {
             selisih = player.position.x - camera1.position.x;
-            selisih = selisih + Time.deltaTime;
+            //selisih = selisih + Time.deltaTime;
             t.eulerAngles = (new Vector3(t.eulerAngles.x, -selisih * 10, t.eulerAngles.z));
+            //t.eulerAngles = Vector3.Lerp(t.eulerAngles, new Vector3(t.eulerAngles.x, -selisih * 10, t.eulerAngles.z), 0.005f);
         }
 
         if (camera1.position.y < player.position.y)
         {
             selisih = player.position.y - camera1.position.y;
-            selisih = selisih + Time.deltaTime;
+            //selisih = selisih + Time.deltaTime;
             t.eulerAngles = (new Vector3(selisih * 10, t.eulerAngles.y, t.eulerAngles.z));
+            //t.eulerAngles = Vector3.Lerp(t.eulerAngles, new Vector3(selisih * 10, t.eulerAngles.y, t.eulerAngles.z), 0.005f);
         }
 
         if (camera1.position.y > player.position.y)
         {
             selisih = player.position.y - camera1.position.y;
-            selisih = selisih + Time.deltaTime;
+            //selisih = selisih + Time.deltaTime;
             t.eulerAngles = (new Vector3(selisih * 10, t.eulerAngles.y, t.eulerAngles.z));
+            //t.eulerAngles = Vector3.Lerp(t.eulerAngles, new Vector3(selisih * 10, t.eulerAngles.y, t.eulerAngles.z), 0.005f);
         }
 
         if (camera1.position.z < player.position.z)
