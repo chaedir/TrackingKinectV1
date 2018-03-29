@@ -11,7 +11,7 @@ using System.IO;
 public class SimpleGestureListener : MonoBehaviour, KinectGestures.GestureListenerInterface
 {
     //for record data
-    
+    public RecordData record;
     /*private List<string[]> rowData = new List<string[]>();
     public float interval = 24;*/
 
@@ -106,8 +106,9 @@ public class SimpleGestureListener : MonoBehaviour, KinectGestures.GestureListen
         //RIGHT HAND GESTURE COMPLETED
         if (gesture == KinectGestures.Gestures.RaiseRightHand)
         {
-            RecordData r = new RecordData();
-            r.Start();
+            record.enabled = true;
+            //RecordData r = new RecordData();
+            //r.Start();
             //InvokeRepeating("Save", 0, 1f / interval);//for record data
             sGestureText += string.Format(" at ({0:F1}, {1:F1})", screenPos.x, screenPos.y);
         }
