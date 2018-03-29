@@ -115,9 +115,7 @@ public class KinectGestures
     float d11;
     float d12;
 
-    //float d21;
-
-   
+    //float d21;  
 
     /*float d11a11b1O2 = d11a11 * b1O2;
     float d12a21b1O2 = d12a21 * b1O2;
@@ -127,9 +125,8 @@ public class KinectGestures
     float d11a11;
     float d11a12;
     float d12a21;
-    float d12a22;  
-
-
+    float d12a22;
+    
 
     private static void SetGestureJoint(ref GestureData gestureData, float timestamp, int joint, Vector3 jointPos)
 	{
@@ -147,10 +144,12 @@ public class KinectGestures
 	}
 	
 	private static void CheckPoseComplete(ref GestureData gestureData, float timestamp, Vector3 jointPos, bool isInPose, float durationToComplete)
-	{
+
+    {
 		if(isInPose)
 		{
-			float timeLeft = timestamp - gestureData.timestamp;
+            
+            float timeLeft = timestamp - gestureData.timestamp;
 			gestureData.progress = durationToComplete > 0f ? Mathf.Clamp01(timeLeft / durationToComplete) : 1.0f;
 	
 			if(timeLeft >= durationToComplete)
@@ -350,12 +349,17 @@ public class KinectGestures
                         //Termination
                         if (d21A > d21B) // Condition 1. When All SUCCESS
                         {
+                            
                             float d21 = d21A;
                             if (d22A > d22B)
                             {
+                                /*RecordData recordData = new RecordData();
+                                recordData.Start();//Record Gesture*/
+
                                 //Debug.Log(x2);
                                 Vector3 jointPos = jointsPos[gestureData.joint];
                                 CheckPoseComplete(ref gestureData, timestamp, jointPos, isInPose, KinectWrapper.Constants.PoseCompleteDuration);
+                                
                             }
                         }
 
@@ -367,6 +371,9 @@ public class KinectGestures
                                 float d22 = d22B;
                                 if (d21 > d22)
                                 {
+                                    /*RecordData recordData = new RecordData();
+                                    recordData.Start();//Record Gesture*/
+
                                     Vector3 jointPos = jointsPos[gestureData.joint];
                                     CheckPoseComplete(ref gestureData, timestamp, jointPos, isInPose, KinectWrapper.Constants.PoseCompleteDuration);
                                 }
@@ -382,6 +389,9 @@ public class KinectGestures
                                 float d22 = d22A;
                                 if (d21 < d22)
                                 {
+                                    /*RecordData recordData = new RecordData();
+                                    recordData.Start();//Record Gesture*/
+
                                     Vector3 jointPos = jointsPos[gestureData.joint];
                                     CheckPoseComplete(ref gestureData, timestamp, jointPos, isInPose, KinectWrapper.Constants.PoseCompleteDuration);
                                 }
@@ -1252,7 +1262,7 @@ public class KinectGestures
 				break;
 
 			// here come more gesture-cases
-		}
-	}
-
+		}        
+    }
+    
 }
