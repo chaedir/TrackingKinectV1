@@ -131,7 +131,7 @@ public class RecordData : MonoBehaviour
     private string getPath()
     {
 #if UNITY_EDITOR
-        return Application.dataPath + "/CSV/" + "Saved_data_X.csv";
+        return Application.dataPath + "/CSV/" + "LemparTombak_RightHand_X20.csv";
 #elif UNITY_ANDROID
         return Application.persistentDataPath+"Saved_data.csv";
 #elif UNITY_IPHONE
@@ -144,7 +144,7 @@ public class RecordData : MonoBehaviour
     private string getPath2()
     {
 #if UNITY_EDITOR
-        return Application.dataPath + "/CSV/" + "Saved_data_Y.csv";
+        return Application.dataPath + "/CSV/" + "LemparTombak_RightHand_Y20.csv";
 #elif UNITY_ANDROID
         return Application.persistentDataPath+"Saved_data.csv";
 #elif UNITY_IPHONE
@@ -157,7 +157,7 @@ public class RecordData : MonoBehaviour
     private string getPath3()
     {
 #if UNITY_EDITOR
-        return Application.dataPath + "/CSV/" + "Saved_data_Z.csv";
+        return Application.dataPath + "/CSV/" + "LemparTombak_RightHand_Z20.csv";
 #elif UNITY_ANDROID
         return Application.persistentDataPath+"Saved_data.csv";
 #elif UNITY_IPHONE

@@ -56,7 +56,7 @@ public class SimpleGestureListener : MonoBehaviour, KinectGestures.GestureListen
 		//GestureInfo.guiText.text = string.Format("{0} Progress: {1:F1}%", gesture, (progress * 100));
 
         //CLICK GESTURE
-		if(gesture == KinectGestures.Gestures.Click && progress > 0.3f)
+		if(gesture == KinectGestures.Gestures.LeftHandCursor && progress > 0.3f)
 		{
 			string sGestureText = string.Format ("{0} {1:F1}% complete", gesture, progress * 100);//coba buat event apa disini
 			if(GestureInfo != null)
@@ -116,7 +116,7 @@ public class SimpleGestureListener : MonoBehaviour, KinectGestures.GestureListen
         //LEFT HAND GESTURE COMPLETED
         if (gesture == KinectGestures.Gestures.RaiseLeftHand)
         {
-            record.enabled = true;
+            //record.enabled = true;
             //RecordData r = new RecordData();
             //r.Start();
             //InvokeRepeating("Save", 0, 1f / interval);//for record data
