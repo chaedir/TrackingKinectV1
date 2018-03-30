@@ -98,10 +98,10 @@ public class SimpleGestureListener : MonoBehaviour, KinectGestures.GestureListen
 		string sGestureText = gesture + " detected";
 
         //CLICK GESTURE COMPLETED
-		if(gesture == KinectGestures.Gestures.Click)
+		/*if(gesture == KinectGestures.Gestures.Click)
         {
             sGestureText += string.Format(" at ({0:F1}, {1:F1})", screenPos.x, screenPos.y);
-        }
+        }*/
 
         //RIGHT HAND GESTURE COMPLETED
         if (gesture == KinectGestures.Gestures.RaiseRightHand)
@@ -112,7 +112,17 @@ public class SimpleGestureListener : MonoBehaviour, KinectGestures.GestureListen
             //InvokeRepeating("Save", 0, 1f / interval);//for record data
             sGestureText += string.Format(" at ({0:F1}, {1:F1})", screenPos.x, screenPos.y);
         }
-            
+
+        //LEFT HAND GESTURE COMPLETED
+        if (gesture == KinectGestures.Gestures.RaiseLeftHand)
+        {
+            record.enabled = true;
+            //RecordData r = new RecordData();
+            //r.Start();
+            //InvokeRepeating("Save", 0, 1f / interval);//for record data
+            sGestureText += string.Format(" at ({0:F1}, {1:F1})", screenPos.x, screenPos.y);
+        }
+
 
         if (GestureInfo != null)
 			GestureInfo.GetComponent<GUIText>().text = sGestureText;
