@@ -55,8 +55,8 @@ public class SimpleGestureListener : MonoBehaviour, KinectGestures.GestureListen
 	{
 		//GestureInfo.guiText.text = string.Format("{0} Progress: {1:F1}%", gesture, (progress * 100));
 
-        //CLICK GESTURE
-		if(gesture == KinectGestures.Gestures.LeftHandCursor && progress > 0.3f)
+        //RISE LEFT HAND GESTURE
+		if(gesture == KinectGestures.Gestures.RaiseLeftHand && progress > 0.3f)
 		{
 			string sGestureText = string.Format ("{0} {1:F1}% complete", gesture, progress * 100);//coba buat event apa disini
 			if(GestureInfo != null)

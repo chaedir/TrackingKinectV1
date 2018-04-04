@@ -421,19 +421,107 @@ public class KinectGestures
 				{
 					case 0:  // gesture detection
 						if(jointsTracked[leftHandIndex] && jointsTracked[leftShoulderIndex] &&
-					            (jointsPos[leftHandIndex].y - jointsPos[leftShoulderIndex].y) > 0.1f)
+					            (jointsPos[leftHandIndex].y - jointsPos[leftShoulderIndex].y) < 0.1f)
 						{
 							SetGestureJoint(ref gestureData, timestamp, leftHandIndex, jointsPos[leftHandIndex]);
 						}
 						break;
-							
-					case 1:  // gesture complete
+
+                    case 1:  // gesture detection
+                        if (jointsTracked[leftHandIndex] && jointsTracked[leftShoulderIndex] &&
+                                (jointsPos[leftHandIndex].y - jointsPos[leftShoulderIndex].y) > 0.1f)
+                        {
+                            SetGestureJoint(ref gestureData, timestamp, leftHandIndex, jointsPos[leftHandIndex]);
+                        }
+                        break;
+
+                    case 2:  // gesture complete
 						bool isInPose = jointsTracked[leftHandIndex] && jointsTracked[leftShoulderIndex] &&
 							(jointsPos[leftHandIndex].y - jointsPos[leftShoulderIndex].y) > 0.1f;
 
-						Vector3 jointPos = jointsPos[gestureData.joint];
-						CheckPoseComplete(ref gestureData, timestamp, jointPos, isInPose, KinectWrapper.Constants.PoseCompleteDuration);
-						break;
+                        b1O1 = b12; //determine the value of b1O1 and b22
+                        b2O1 = b22; //i choose b12 and b22 cz r.hand.y < r.shoulder.y (rock) 
+                        b1O2 = b11; //determine the value of b1O2 and b2O2
+                        b2O2 = b21; //i choose b11 and b21 cz r.hand.y > r.shoulder.y (pop)
+
+                        //Initialisation
+                        d11 = phi1 * b1O1;
+                        d12 = phi2 * b2O1;
+                        //Debug.Log(d11);
+                        d11a11 = d11 * a11;
+                        d11a12 = d11 * a12;
+                        d12a21 = d12 * a21;
+                        d12a22 = d12 * a22;
+
+                        //Rekurtion
+                        //Looking for max number of d21
+                        float d21A = d11a11 * b1O2;
+                        float d21B = d12a21 * b1O2;
+
+                        //Looking for max number of d22
+                        float d22A = d11a12 * b2O2;
+                        float d22B = d12a22 * b2O2;
+
+                        Debug.Log("d21A");
+                        Debug.Log(d21A);
+                        Debug.Log("d21B");
+                        Debug.Log(d21B);
+                        Debug.Log("d22A");
+                        Debug.Log(d22A);
+                        Debug.Log("d22B");
+                        Debug.Log(d22B);
+                        //Termination
+                        if (d21A > d21B) // Condition 1. When All SUCCESS
+                        {
+
+                            float d21 = d21A;
+                            if (d22A > d22B)
+                            {
+                                /*RecordData recordData = new RecordData();
+                                recordData.Start();//Record Gesture*/
+
+                                //Debug.Log(x2);
+                                Vector3 jointPos = jointsPos[gestureData.joint];
+                                CheckPoseComplete(ref gestureData, timestamp, jointPos, isInPose, KinectWrapper.Constants.PoseCompleteDuration);
+
+                            }
+                        }
+
+                        if (d21A > d21B) // Condition 2. When d21A (success) > d22B (fail)
+                        {
+                            float d21 = d21A;
+                            if (d22A < d22B)
+                            {
+                                float d22 = d22B;
+                                if (d21 > d22)
+                                {
+                                    /*RecordData recordData = new RecordData();
+                                    recordData.Start();//Record Gesture*/
+
+                                    Vector3 jointPos = jointsPos[gestureData.joint];
+                                    CheckPoseComplete(ref gestureData, timestamp, jointPos, isInPose, KinectWrapper.Constants.PoseCompleteDuration);
+                                }
+
+                            }
+                        }
+
+                        if (d21A < d21B) // Condition 3. When d21B (fail) < d22A (success)
+                        {
+                            float d21 = d21B;
+                            if (d22A > d22B)
+                            {
+                                float d22 = d22A;
+                                if (d21 < d22)
+                                {
+                                    /*RecordData recordData = new RecordData();
+                                    recordData.Start();//Record Gesture*/
+
+                                    Vector3 jointPos = jointsPos[gestureData.joint];
+                                    CheckPoseComplete(ref gestureData, timestamp, jointPos, isInPose, KinectWrapper.Constants.PoseCompleteDuration);
+                                }
+                            }
+                        }
+                        break;
 				}
 				break;
 
