@@ -8,7 +8,8 @@ using System;
 public class RecordData : MonoBehaviour
 
 {
-
+    DateTime fileDate;
+    string stringDate;
     private List<string[]> rowData = new List<string[]>();
     private List<string[]> rowData2 = new List<string[]>();
     private List<string[]> rowData3 = new List<string[]>();
@@ -17,6 +18,9 @@ public class RecordData : MonoBehaviour
     // Use this for initialization
     public void Start()
     {
+        fileDate = DateTime.Now;
+        stringDate = fileDate.ToString("dd-MM-yyyy HH-mm-ss");
+        Debug.Log(stringDate);
         InvokeRepeating("Save", 0, 1f / interval);
         InvokeRepeating("Save2", 0, 1f / interval);
         InvokeRepeating("Save3", 0, 1f / interval);
@@ -131,7 +135,7 @@ public class RecordData : MonoBehaviour
     private string getPath()
     {
 #if UNITY_EDITOR
-        return Application.dataPath + "/CSV/" + "LemparTombak_RightHand_X20.csv";
+        return Application.dataPath + "/CSV/right/LemparTombak_RightHand_X " + stringDate +  ".csv";
 #elif UNITY_ANDROID
         return Application.persistentDataPath+"Saved_data.csv";
 #elif UNITY_IPHONE
@@ -144,7 +148,7 @@ public class RecordData : MonoBehaviour
     private string getPath2()
     {
 #if UNITY_EDITOR
-        return Application.dataPath + "/CSV/" + "LemparTombak_RightHand_Y20.csv";
+        return Application.dataPath + "/CSV/right/LemparTombak_RightHand_Y " + stringDate +  ".csv";
 #elif UNITY_ANDROID
         return Application.persistentDataPath+"Saved_data.csv";
 #elif UNITY_IPHONE
@@ -157,7 +161,7 @@ public class RecordData : MonoBehaviour
     private string getPath3()
     {
 #if UNITY_EDITOR
-        return Application.dataPath + "/CSV/" + "LemparTombak_RightHand_Z20.csv";
+        return Application.dataPath + "/CSV/right/LemparTombak_RightHand_Z " + stringDate +  ".csv";
 #elif UNITY_ANDROID
         return Application.persistentDataPath+"Saved_data.csv";
 #elif UNITY_IPHONE

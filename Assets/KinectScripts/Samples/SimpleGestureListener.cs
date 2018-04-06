@@ -106,7 +106,7 @@ public class SimpleGestureListener : MonoBehaviour, KinectGestures.GestureListen
         //RIGHT HAND GESTURE COMPLETED
         if (gesture == KinectGestures.Gestures.RaiseRightHand)
         {
-            record.enabled = true;
+            //record.enabled = true;
             //RecordData r = new RecordData();
             //r.Start();
             //InvokeRepeating("Save", 0, 1f / interval);//for record data
@@ -116,7 +116,7 @@ public class SimpleGestureListener : MonoBehaviour, KinectGestures.GestureListen
         //LEFT HAND GESTURE COMPLETED
         if (gesture == KinectGestures.Gestures.RaiseLeftHand)
         {
-            //record.enabled = true;
+            record.enabled = true;
             //RecordData r = new RecordData();
             //r.Start();
             //InvokeRepeating("Save", 0, 1f / interval);//for record data
